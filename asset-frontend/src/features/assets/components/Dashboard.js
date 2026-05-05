@@ -163,6 +163,21 @@ export default function Dashboard() {
 	const stockTurnoverPercent = stockMetrics.totalReceived > 0 ? Math.round((stockMetrics.totalIssued / stockMetrics.totalReceived) * 100) : 0;
 	const averageStockValue = stockItems.length > 0 ? stockMetrics.totalValue / stockItems.length : 0;
 
+	const assetConditionData = [
+		{ label: 'In Use', value: assetMetrics.inUse, color: '#0864b8' },
+		{ label: 'In Storage', value: assetMetrics.inStorage, color: '#0b6a4a' },
+		{ label: 'Under Repair', value: assetMetrics.underRepair, color: '#d97706' },
+		{ label: 'Disposed', value: assetMetrics.disposed, color: '#a4262c' },
+	];
+
+	const stockFlowData = [
+		{ label: 'Received', value: stockMetrics.totalReceived, color: '#115e59' },
+		{ label: 'Issued', value: stockMetrics.totalIssued, color: '#0b5f95' },
+		{ label: 'Balance', value: stockMetrics.totalBalance, color: '#2d6a4f' },
+	];
+
+	const maxFlowValue = Math.max(...stockFlowData.map(item => item.value), 1);
+
 	return (
 		<div className={styles.container} ref={reportRef}>
 			<div className={styles.pageHeader}>
@@ -191,6 +206,49 @@ export default function Dashboard() {
 				<span>Average Stock Value</span>
 				<strong>RM {averageStockValue.toLocaleString('en-MY', { minimumFractionDigits: 2 })}</strong>
 				<p>Average estimated value per stock line item.</p>
+			</div>
+		</div>
+
+		<div className={styles.chartRow}>
+			<div className={styles.chartCard}>
+				<div className={styles.chartCardHeader}>
+					<h3>Asset Condition Breakdown</h3>
+					<p>How assets are distributed across their current state.</p>
+				</div>
+				<div className={styles.barChartList}>
+					{assetConditionData.map(item => {
+						const width = overallMetrics.total > 0 ? Math.round((item.value / overallMetrics.total) * 100) : 0;
+						return (
+							<div key={item.label} className={styles.barRow}>
+								<div className={styles.barLabel}>{item.label}</div>
+								<div className={styles.barTrack}>
+									<div className={styles.barFill} style={{ width: `${width}%`, backgroundColor: item.color }} />
+								</div>
+								<div className={styles.barValue}>{item.value}</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+			<div className={styles.chartCard}>
+				<div className={styles.chartCardHeader}>
+					<h3>Stock Movement Summary</h3>
+					<p>Inventory flow compared by received, issued, and current balance.</p>
+				</div>
+				<div className={styles.barChartList}>
+					{stockFlowData.map(item => {
+						const width = Math.round((item.value / maxFlowValue) * 100);
+						return (
+							<div key={item.label} className={styles.barRow}>
+								<div className={styles.barLabel}>{item.label}</div>
+								<div className={styles.barTrack}>
+									<div className={styles.barFill} style={{ width: `${width}%`, backgroundColor: item.color }} />
+								</div>
+								<div className={styles.barValue}>{item.value}</div>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</div>
 
