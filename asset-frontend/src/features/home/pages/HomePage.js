@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../auth/context/AuthContext';
 import styles from './HomePage.module.css';
 
-export default function HomePage({ children }) {
+export default function MainLayout({ children }) {
 	const { user, logout } = useContext(AuthContext);
 	return (
 		<div className={styles.container}>
@@ -16,8 +16,7 @@ export default function HomePage({ children }) {
 			</header>
 			
 			<nav className={styles.nav}>
-				<NavLink to="/home" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>🏠 Home</NavLink>
-				<NavLink to="/dashboard" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>📊 Dashboard</NavLink>
+					<NavLink to="/dashboard" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>📊 Dashboard</NavLink>
 				<NavLink to="/assets" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>🧰 Asset Register</NavLink>
 				<NavLink to="/assets/new" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}>➕ Add New Record</NavLink>
 			</nav>

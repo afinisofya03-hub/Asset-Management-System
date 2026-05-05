@@ -29,7 +29,7 @@ export default function LoginForm() {
 				return;
 			}
 			await login({ username, password });
-			nav('/home');
+			nav('/dashboard');
 		} catch (err) {
 			setError(err.message || 'Invalid credentials');
 			setLoading(false);

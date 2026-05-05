@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import './App.css';
 import LoginPage from './features/auth/pages/LoginPage';
-import HomePage from './features/home/pages/HomePage';
+import MainLayout from './features/home/pages/HomePage';
 import DashboardPage from './features/assets/pages/DashboardPage';
 import AssetPage from './features/assets/pages/AssetPage';
 import FormFactory from './features/assets/forms/FormFactory';
@@ -15,9 +15,9 @@ function App() {
 	
 	// Layout wrapper that includes header & nav
 	const LayoutWithNav = ({ children }) => (
-		<HomePage>
+		<MainLayout>
 			{children}
-		</HomePage>
+		</MainLayout>
 	);
 
 	// Wrapper to read categoryId route param and render ViewFactory
@@ -37,9 +37,7 @@ function App() {
 		<div className="App">
 			<Routes>
 				<Route path="/login" element={<LoginPage />} />
-				<Route path="/" element={<Navigate to={user ? '/home' : '/login'} />} />
-				
-				<Route path="/home" element={<Private><HomePage /></Private>} />
+			<Route path="/" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
 				<Route path="/dashboard" element={<Private><LayoutWithNav><DashboardPage /></LayoutWithNav></Private>} />
 				<Route path="/assets" element={<Private><LayoutWithNav><AssetPage /></LayoutWithNav></Private>} />
 				<Route path="/office-assets" element={<Navigate to="/assets?mode=asset" replace />} />
