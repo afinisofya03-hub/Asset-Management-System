@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import api from '../../../api/axios';
 import styles from './Dashboard.module.css';
 import { isStockCategory } from '../config/categoryMasters';
@@ -6,11 +8,30 @@ import { isStockCategory } from '../config/categoryMasters';
 export default function Dashboard() {
 	const [assets, setAssets] = useState([]);
 	const [categories, setCategories] = useState([]);
+	const reportRef = useRef(null);
 
 	useEffect(() => {
 		api.getAssets().then(setAssets);
 		api.getCategories().then(setCategories);
 	}, []);
+
+	const handleExportPdf = async () => {
+		if (!reportRef.current) return;
+
+		const canvas = await html2canvas(reportRef.current, {
+			scale: 2,
+			useCORS: true,
+			backgroundColor: '#ffffff'
+		});
+
+		const imgData = canvas.toDataURL('image/png');
+		const pdf = new jsPDF('landscape', 'pt', 'a4');
+		const pdfWidth = pdf.internal.pageSize.getWidth();
+		const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+		pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+		pdf.save('dashboard-report.pdf');
+	};
 
 	const getCategoryName = (categoryId) => (
 		categories.find(category => Number(category.id) === Number(categoryId))?.name || 'Unknown'
@@ -139,10 +160,16 @@ export default function Dashboard() {
 	const stockSummary = buildStockSummary(stockItems);
 
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} ref={reportRef}>
 			<div className={styles.pageHeader}>
 				<h2>Dashboard Overview</h2>
 				<p>Combined visibility for all office assets and inventory stock without filters.</p>
+			</div>
+
+			<div className={styles.toolbar}>
+				<button className={styles.exportButton} onClick={handleExportPdf}>
+					Export PDF
+				</button>
 			</div>
 			
 			<div className={styles.mainStats}>
