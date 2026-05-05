@@ -170,6 +170,33 @@ export default function Dashboard() {
 		{ label: 'Disposed', value: assetMetrics.disposed, color: '#a4262c' },
 	];
 
+	const buildCategoryTrendData = items => {
+		const grouped = {};
+		items.forEach(item => {
+			const category = getCategoryName(item.categoryId);
+			grouped[category] = (grouped[category] || 0) + 1;
+		});
+		return Object.entries(grouped)
+			.map(([label, value]) => ({ label, value }))
+			.sort((left, right) => right.value - left.value)
+			.slice(0, 6)
+			.reverse();
+	};
+
+	const categoryTrendData = buildCategoryTrendData(assets);
+	const trendMax = Math.max(...categoryTrendData.map(item => item.value), 1);
+	const chartWidth = 380;
+	const chartHeight = 220;
+	const chartMargin = { top: 16, right: 24, bottom: 36, left: 34 };
+	const chartInnerWidth = chartWidth - chartMargin.left - chartMargin.right;
+	const chartInnerHeight = chartHeight - chartMargin.top - chartMargin.bottom;
+	const trendPoints = categoryTrendData.map((item, index) => {
+		const x = chartMargin.left + (chartInnerWidth * index / Math.max(categoryTrendData.length - 1, 1));
+		const y = chartMargin.top + chartInnerHeight - (item.value / trendMax) * chartInnerHeight;
+		return { ...item, x, y };
+	});
+	const trendPath = trendPoints.map((point, idx) => `${idx === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+
 	const stockFlowData = [
 		{ label: 'Received', value: stockMetrics.totalReceived, color: '#115e59' },
 		{ label: 'Issued', value: stockMetrics.totalIssued, color: '#0b5f95' },
@@ -248,6 +275,42 @@ export default function Dashboard() {
 							</div>
 						);
 					})}
+				</div>
+			</div>
+			<div className={styles.chartCard}>
+				<div className={styles.chartCardHeader}>
+					<h3>Top Category Trend</h3>
+					<p>Most active asset categories by record count.</p>
+				</div>
+				<div className={styles.lineChartWrapper}>
+					{categoryTrendData.length === 0 ? (
+						<div className={styles.chartEmpty}>No category trend data available yet.</div>
+					) : (
+						<svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className={styles.lineChartSvg}>
+							<g>
+								{[0, 1, 2, 3].map(index => {
+									const y = chartMargin.top + (chartInnerHeight * index / 3);
+									const value = Math.round(trendMax - (trendMax * index / 3));
+									return (
+										<g key={index}>
+											<line x1={chartMargin.left} y1={y} x2={chartWidth - chartMargin.right} y2={y} className={styles.lineChartGridLine} />
+											<text x={chartMargin.left - 8} y={y + 4} className={styles.lineChartGridLabel} textAnchor="end">{value}</text>
+										</g>
+									);
+								})}
+							</g>
+							<path d={trendPath} className={styles.lineChartPath} />
+							{trendPoints.map(point => (
+								<g key={point.label}>
+									<circle cx={point.x} cy={point.y} r="5" className={styles.lineChartPoint} />
+									<text x={point.x} y={point.y - 12} className={styles.lineChartValue}>{point.value}</text>
+								</g>
+							))}
+							{trendPoints.map(point => (
+								<text key={`${point.label}-label`} x={point.x} y={chartHeight - 10} className={styles.lineChartLabel} textAnchor="middle">{point.label}</text>
+							))}
+						</svg>
+					)}
 				</div>
 			</div>
 		</div>

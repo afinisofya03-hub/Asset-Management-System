@@ -38,60 +38,77 @@ export default function LoginForm() {
 
 	return (
 		<form className={styles.form} onSubmit={submit}>
-			<div className={styles.logoContainer}>
-				<img src={companyLogo} alt="Company Logo" className={styles.logo} />
+			<div className={styles.header}>
+				<div className={styles.logoContainer}>
+					<img src={companyLogo} alt="Company Logo" className={styles.logo} />
+				</div>
+				<div className={styles.titleGroup}>
+					<h2>Inventory Management</h2>
+					<p className={styles.subtitle}>Secure access to your asset management dashboard.</p>
+				</div>
 			</div>
-			<h2>NiSE Inventory Management System</h2>
-			<p className={styles.subtitle}>Login to your account</p>
-			
-			{/* Role Selection */}
+
 			<div className={styles.roleSection}>
-				<p className={styles.roleLabel}>Select Your Role:</p>
+				<div className={styles.roleHeader}>
+					<p className={styles.roleLabel}>Access Role</p>
+					<p className={styles.roleHint}>Choose a role before signing in.</p>
+				</div>
 				<div className={styles.roleButtons}>
 					<button
 						type="button"
 						className={`${styles.roleBtn} ${selectedRole === 'Admin' ? styles.roleActive : ''}`}
 						onClick={() => setSelectedRole('Admin')}
+						aria-pressed={selectedRole === 'Admin'}
 					>
-						👨‍💼 Admin
+						<span className={`${styles.roleIcon} ${styles.adminIcon}`} />
+						<span>Admin</span>
 					</button>
 					<button
 						type="button"
 						className={`${styles.roleBtn} ${selectedRole === 'User' ? styles.roleActive : ''}`}
 						onClick={() => setSelectedRole('User')}
+						aria-pressed={selectedRole === 'User'}
 					>
-						👤 User
+						<span className={`${styles.roleIcon} ${styles.userIcon}`} />
+						<span>User</span>
 					</button>
 				</div>
 			</div>
 
 			{error && <div className={styles.error}>{error}</div>}
-			
-			<div>
-				<input 
+
+			<div className={styles.inputGroup}>
+				<label htmlFor="username" className={styles.label}>Username</label>
+				<input
 					type="text"
-					placeholder="Username" 
-					value={username} 
+					id="username"
+					placeholder="Enter your username"
+					value={username}
 					onChange={e => setUsername(e.target.value)}
 					disabled={loading}
 				/>
 			</div>
-			<div>
-				<input 
+
+			<div className={styles.inputGroup}>
+				<label htmlFor="password" className={styles.label}>Password</label>
+				<input
 					type="password"
-					placeholder="Password" 
-					value={password} 
+					id="password"
+					placeholder="Enter your password"
+					value={password}
 					onChange={e => setPassword(e.target.value)}
 					disabled={loading}
 				/>
 			</div>
+
 			<button type="submit" disabled={loading || !selectedRole}>
-				{loading ? 'Logging in...' : 'Login'}
+				{loading ? 'Logging in...' : 'Sign in'}
 			</button>
-			<div style={{ marginTop: '12px', fontSize: '12px', color: '#999', textAlign: 'center' }}>
-				<p><strong>Demo Credentials:</strong></p>
-				<p>Admin: admin / admin123</p>
-				<p>User: user1 / admin123</p>
+
+			<div className={styles.noteBox}>
+				<p className={styles.noteTitle}>Demo Credentials</p>
+				<p>Admin: <strong>admin</strong> / <strong>admin123</strong></p>
+				<p>User: <strong>user1</strong> / <strong>admin123</strong></p>
 			</div>
 		</form>
 	);
