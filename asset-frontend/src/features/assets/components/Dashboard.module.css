@@ -19,18 +19,63 @@
 .toolbar {
 	display: flex;
 	justify-content: flex-end;
-	margin: 16px 0;
+	margin: 16px 0 24px;
 }
 
 .exportButton {
-	padding: 10px 18px;
+	padding: 12px 22px;
 	border-radius: 999px;
 	border: none;
-	background: var(--primary);
+	background: linear-gradient(135deg, rgba(12, 114, 242, 0.95), rgba(6, 75, 207, 0.95));
 	color: var(--on-primary);
 	font-weight: 700;
 	cursor: pointer;
-	transition: transform 0.15s ease, opacity 0.15s ease;
+	transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+	box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+}
+
+.exportButton:hover {
+	transform: translateY(-1px);
+	opacity: 0.95;
+	box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+}
+
+.analyticsRow {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(220px, 1fr));
+	gap: 18px;
+	margin-bottom: 24px;
+}
+
+.analyticsCard {
+	padding: 22px 20px;
+	border-radius: 18px;
+	background: rgba(255, 255, 255, 0.96);
+	border: 1px solid rgba(140, 167, 255, 0.22);
+	box-shadow: 0 18px 48px rgba(15, 23, 42, 0.06);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.analyticsCard span {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	color: var(--secondary);
+	font-weight: 700;
+}
+
+.analyticsCard strong {
+	font-size: 2rem;
+	color: var(--text);
+}
+
+.analyticsCard p {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.7;
+	color: var(--muted-text);
 }
 
 .exportButton:hover {
@@ -160,6 +205,10 @@
 
 	.sectionHeader {
 		flex-direction: column;
+	}
+
+	.analyticsRow {
+		grid-template-columns: 1fr;
 	}
 
 	.sectionStats {

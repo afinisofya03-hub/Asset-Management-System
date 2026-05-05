@@ -159,6 +159,10 @@ export default function Dashboard() {
 	const assetSummary = buildAssetSummary(assetItems);
 	const stockSummary = buildStockSummary(stockItems);
 
+	const utilizationPercent = overallMetrics.total > 0 ? Math.round((overallMetrics.assigned / overallMetrics.total) * 100) : 0;
+	const stockTurnoverPercent = stockMetrics.totalReceived > 0 ? Math.round((stockMetrics.totalIssued / stockMetrics.totalReceived) * 100) : 0;
+	const averageStockValue = stockItems.length > 0 ? stockMetrics.totalValue / stockItems.length : 0;
+
 	return (
 		<div className={styles.container} ref={reportRef}>
 			<div className={styles.pageHeader}>
@@ -166,13 +170,31 @@ export default function Dashboard() {
 				<p>Combined visibility for all office assets and inventory stock without filters.</p>
 			</div>
 
-			<div className={styles.toolbar}>
-				<button className={styles.exportButton} onClick={handleExportPdf}>
-					Export PDF
-				</button>
+		<div className={styles.toolbar}>
+			<button className={styles.exportButton} onClick={handleExportPdf}>
+				Export PDF
+			</button>
+		</div>
+
+		<div className={styles.analyticsRow}>
+			<div className={styles.analyticsCard}>
+				<span>Asset Utilization</span>
+				<strong>{utilizationPercent}%</strong>
+				<p>Share of total assets currently assigned or issued.</p>
 			</div>
-			
-			<div className={styles.mainStats}>
+			<div className={styles.analyticsCard}>
+				<span>Inventory Turnover</span>
+				<strong>{stockTurnoverPercent}%</strong>
+				<p>Issued stock relative to received stock over the current dataset.</p>
+			</div>
+			<div className={styles.analyticsCard}>
+				<span>Average Stock Value</span>
+				<strong>RM {averageStockValue.toLocaleString('en-MY', { minimumFractionDigits: 2 })}</strong>
+				<p>Average estimated value per stock line item.</p>
+			</div>
+		</div>
+
+		<div className={styles.mainStats}>
 				<div className={styles.statCard + ' ' + styles.card1}>
 					<div className={styles.statIcon}>📦</div>
 					<div className={styles.statContent}>
@@ -317,4 +339,5 @@ export default function Dashboard() {
 		</div>
 	);
 }
+
 

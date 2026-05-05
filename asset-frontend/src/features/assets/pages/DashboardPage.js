@@ -5,9 +5,17 @@ import styles from './DashboardPage.module.css';
 export default function DashboardPage() {
 	return (
 		<div className={styles.container}>
-			<div className={styles.content}>
+			<header className={styles.pageIntro}>
+				<div className={styles.pageIntroInfo}>
+					<p className={styles.subTitle}>Executive Summary</p>
+					<h1>Business Asset Dashboard</h1>
+					<p>Monitor enterprise asset performance, inventory health, and operational risk from one central view.</p>
+				</div>
+			</header>
+
+			<section className={styles.pageBody}>
 				<Dashboard />
-			</div>
+			</section>
 		</div>
 	);
 }
