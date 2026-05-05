@@ -154,8 +154,9 @@
 	transform: translateY(-1px);
 }
 
-.mainStats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
-.statCard { padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 16px; color: var(--text); }
+.mainStats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.statCard { padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; color: var(--text); min-height: 100px; }
+.statIcon { font-size: 22px; }
 
 .card1 { background: var(--primary); color: var(--on-primary); }
 .card2 { background: var(--secondary); }
